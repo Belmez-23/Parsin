@@ -43,6 +43,10 @@ class Product
      */
     private $category_id;
 
+    public function toString()
+    {
+        return (string) $this->getName();
+    }
     public function getId(): ?int
     {
         return $this->id;
