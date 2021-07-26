@@ -7,6 +7,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\EntityFilter;
 
@@ -38,7 +39,7 @@ class ProductCrudController extends AbstractCrudController
     {
         yield AssociationField::new('category_id');
         yield TextField::new('name');
-        yield TextField::new('price');
+        yield IntegerField::new('price');
         yield TextField::new('url')->hideOnIndex();
         yield TextField::new('sku')->hideOnIndex();
 
