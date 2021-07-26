@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Category;
 use App\Repository\ProductRepository;
+use GuzzleHttp\Client;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,7 +28,12 @@ class ParseController extends AbstractController
         if(is_null($url)){
             return new Response($twig->render('parse/parse.html.twig'));
         } else {
-            return $this->redirect('/parser/'.$url);
+            //получить страницу по урл, найти объекты, вставить в базу, редирект по новому айди
+            $client = new Client();
+            //$response = $client->get($url);
+            $res = $client->request('GET', $url, ['allow_redirects' => false]);
+            var_dump($res->getBody()->getContents());
+            return $this->redirect('/parser/'.$client);
         }
     }
 

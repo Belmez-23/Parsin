@@ -1,4 +1,7 @@
 {
+    "clue/stream-filter": {
+        "version": "v1.5.0"
+    },
     "composer/package-versions-deprecated": {
         "version": "1.11.99.2"
     },
@@ -111,6 +114,45 @@
     },
     "nikic/php-parser": {
         "version": "v4.12.0"
+    },
+    "php-http/client-common": {
+        "version": "2.4.0"
+    },
+    "php-http/discovery": {
+        "version": "1.14.0"
+    },
+    "php-http/guzzle7-adapter": {
+        "version": "1.0.0"
+    },
+    "php-http/httplug": {
+        "version": "2.2.0"
+    },
+    "php-http/httplug-bundle": {
+        "version": "1.6",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "1.6",
+            "ref": "87b3d491d593d2c6e3b90bf0689ac69a188bfa5f"
+        },
+        "files": [
+            "config/packages/httplug.yaml"
+        ]
+    },
+    "php-http/logger-plugin": {
+        "version": "1.2.1"
+    },
+    "php-http/message": {
+        "version": "1.11.1"
+    },
+    "php-http/message-factory": {
+        "version": "v1.0.2"
+    },
+    "php-http/promise": {
+        "version": "1.1.0"
+    },
+    "php-http/stopwatch-plugin": {
+        "version": "1.4.0"
     },
     "psr/cache": {
         "version": "2.0.0"
