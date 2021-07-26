@@ -25,7 +25,6 @@ class ProductCrudController extends AbstractCrudController
             ->setEntityLabelInPlural('Products')
             ->setSearchFields(['name', 'category_id'])
             ->setDefaultSort(['category_id' => 'DESC']);
-        ;
     }
 
     public function configureFilters(Filters $filters): Filters

@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Category {{ category }}{% endblock %}
+
+{% block body %}
+<h3>This category is {{ category }}</h3>
+{% if products|length > 0 %}
+    <h4>Products:</h4>
+{% for product in products %}
+<table>
+    <tr><td>
+        {{ product.name }}
+    </td><td>
+        {{ product.price }}
+    </td></tr>
+</table>
+
+{% endfor %}
+{% else %}
+<div>No product have been found for this category.</div>
+{% endif %}
+{% endblock %}
