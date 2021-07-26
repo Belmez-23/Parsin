@@ -6,6 +6,7 @@ use App\Entity\Category;
 use App\Repository\ProductRepository;
 use GuzzleHttp\Client;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -32,7 +33,11 @@ class ParseController extends AbstractController
             $client = new Client();
             //$response = $client->get($url);
             $res = $client->request('GET', $url, ['allow_redirects' => false]);
-            var_dump($res->getBody()->getContents());
+            $con = $res->getBody()->getContents();
+            $craw = new Crawler($con);
+            $craw = $craw->filterXPath('/html/body/div[1]/div/div[1]/div[3]/div[1]/div/div[2]/h1');
+            //использовать фильтрацию на craw
+            var_dump($craw);
             return $this->redirect('/parser/'.$client);
         }
     }
