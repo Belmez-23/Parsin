@@ -59,13 +59,15 @@ class ParseController extends AbstractController
             }
             //var_dump($craw->filterXPath('//form/div/div[2]/div[1]')->text());
             $craw_pro = $craw->filterXPath('//form/div/div[2]/div[1]/div[1]');
-            //$craw_pri = $craw->filterXPath('//form/div/div[2]/div[1]/div[1]/div[3]/div/div/strong');
 
+            //var_dump($craw_pri);
             foreach($craw_pro as $pro){
                 $product = new Product();
                 //var_dump($pro);
                 $product->setName($pro->nodeValue);
-                //$product->setPrice($craw_pri->text());
+                $craw_pri = $craw->filterXPath('//form/div/div[2]/div[1]/div[3]/div/div');
+                $craw_pri = $craw_pri->text();
+                $product->setPrice($craw_pri);
                 //var_dump($product);
                 $category->addProduct($product);
                 $this->entityManager->persist($product);
