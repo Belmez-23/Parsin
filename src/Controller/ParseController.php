@@ -19,7 +19,7 @@ class ParseController extends AbstractController
 {
     private $entityManager;
     private $xp_category = 'h1';
-    private $xp_product = 'div.product_name';
+    private $xp_product = 'div.product_bot_in1';
 
     public function __construct(EntityManagerInterface $entityManager)
     {
@@ -63,18 +63,15 @@ class ParseController extends AbstractController
             $craw_pro = $craw->filter($this->xp_product);
 
             foreach($craw_pro as $pro){
-                //var_dump($pro);
+                $cp = new Crawler($pro);
                 $product = new Product();
-                $pro_name = $pro->nodeValue;
-                //ro_name = htmlspecialchars($sibling->nodeValue);
-                //var_dump($pro_name);
-                //$pro_name = $craw_pro->filterXPath('//div[@class="product_name"]')->text();
-                //dd($pro_name);
-                //проверка имеющихся записей
+                $pro_name = $cp->filter('div.product_name')->text();
 
                 if(!($productRepository->findByName($pro_name))){
                     $product->setName($pro_name);
-                    $pro_price = $craw->filterXPath('//strong');
+                    $cp = new Crawler($pro);
+                    $pro_price = $cp->filter('.price-current');
+                    //var_dump($pro_price);
                     $product->setPrice($pro_price->text());
                       //var_dump($product); craw_pro->filterXPath('//div[@class="product-price"]')->text()
                     $category->addProduct($product);
@@ -82,12 +79,7 @@ class ParseController extends AbstractController
                     $this->entityManager->flush();
                 }
             }
-            /*
-            $craw->filterXPath('//form/div/div[2]/div[1]')->each(function(Crawler $craw, $p) {
 
-            }
-            );
-            */
             return $this->redirect('/parser/'.$category->getId());
         }
         else return new Response("Wrong URL address");
