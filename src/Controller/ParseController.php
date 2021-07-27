@@ -29,9 +29,10 @@ class ParseController extends AbstractController
     #[Route('/', name: 'home')]
     public function index(): Response
     {
-        return $this->render('parse/index.html.twig', [
+        return $this->redirect('/admin');
+            /*$this->render('parse/index.html.twig', [
             'controller_name' => 'ParseController',
-        ]);
+        ]); */
     }
 
     #[Route('/parser', name: 'parser')]
@@ -80,10 +81,10 @@ class ParseController extends AbstractController
                     $product_count++;
                 }
             }
-            $this->addFlash('success', 'There are '.$product_count.' new products in '.$category_name.' category');
+            $this->addFlash('success', 'Добавлено '.$product_count.' новых товаров в категорию '.$category_name);
             return $this->redirect('/parser/'.$category->getId());
         }
-        else return new Response("Wrong URL address");
+        else return new Response("Неправильный ввод");
     }
 
     #[Route('/parser/{id}', name: 'category')]

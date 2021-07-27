@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Parse{% endblock %}
+{% block title %}Парсим{% endblock %}
 
 {% block body %}
     <style>
@@ -9,11 +9,11 @@
     </style>
     <h1>Hello</h1>
 
-    Paste URL here
+    Вставьте URL сюда
     <form method="get" action="{{ path('parser') }}">
 
         <input type="text" name="url" value=""/>
         <input type="submit" />
     </form><br>
-    For example: https://nyapi.ru/catalog/anime-figurines-dolls-rah
+    К примеру: https://nyapi.ru/catalog/anime-figurines-dolls-rah
 {% endblock %}
