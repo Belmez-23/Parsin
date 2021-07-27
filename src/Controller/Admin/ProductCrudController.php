@@ -38,7 +38,7 @@ class ProductCrudController extends AbstractCrudController
     {
         yield AssociationField::new('category_id');
         yield TextField::new('name');
-        yield IntegerField::new('price');
+        yield TextField::new('price');
         yield TextField::new('url')->hideOnIndex();
         yield TextField::new('sku')->hideOnIndex();
 

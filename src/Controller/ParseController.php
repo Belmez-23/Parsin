@@ -18,6 +18,8 @@ use Twig\Environment;
 class ParseController extends AbstractController
 {
     private $entityManager;
+    private $xp_category = 'h1';
+    private $xp_product = 'div.product_name';
 
     public function __construct(EntityManagerInterface $entityManager)
     {
@@ -47,7 +49,7 @@ class ParseController extends AbstractController
             $craw = new Crawler($con);
             //путь к заголовку
             // заменить на Хпаз ОЗОНа, мейби вынести в конструкт / отд класс
-            $category_name = $craw->filterXPath('//body/div[1]/div[7]/div[2]/main/h1')->text();
+            $category_name = $craw->filter($this->xp_category)->text();
             //взять заголовок: если не существует - добавить, если существует - найти)
             if(!($categoryRepository->findOneByName($category_name))){
                 $category = new Category();
@@ -57,20 +59,24 @@ class ParseController extends AbstractController
             } else {
                 $category = $categoryRepository->findOneByName($category_name);
             }
-            //var_dump($craw->filterXPath('//form/div/div[2]/div[1]')->text());
-            $craw_pro = $craw->filterXPath('//form/div/div[2]/div[1]/div[1]');
 
-            //var_dump($craw_pri);
+            $craw_pro = $craw->filter($this->xp_product);
+
             foreach($craw_pro as $pro){
+                //var_dump($pro);
                 $product = new Product();
                 $pro_name = $pro->nodeValue;
+                //ro_name = htmlspecialchars($sibling->nodeValue);
+                //var_dump($pro_name);
+                //$pro_name = $craw_pro->filterXPath('//div[@class="product_name"]')->text();
+                //dd($pro_name);
                 //проверка имеющихся записей
+
                 if(!($productRepository->findByName($pro_name))){
                     $product->setName($pro_name);
-                    $craw_pri = $craw->filterXPath('//div[2]/div[1]/div[3]/div/div');
-                    $craw_pri = $craw_pri->text();
-                    $product->setPrice($craw_pri);
-                    //var_dump($product);
+                    $pro_price = $craw->filterXPath('//strong');
+                    $product->setPrice($pro_price->text());
+                      //var_dump($product); craw_pro->filterXPath('//div[@class="product-price"]')->text()
                     $category->addProduct($product);
                     $this->entityManager->persist($product);
                     $this->entityManager->flush();
