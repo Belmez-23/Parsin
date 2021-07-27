@@ -33,7 +33,7 @@ class ParseController extends AbstractController
     }
 
     #[Route('/parser', name: 'parser')]
-    public function parse(Environment $twig, Request $request, CategoryRepository $categoryRepository): Response
+    public function parse(Environment $twig, Request $request, CategoryRepository $categoryRepository, ProductRepository $productRepository): Response
     {
         $url = $request->query->get('url');
         if(is_null($url)){
@@ -63,15 +63,18 @@ class ParseController extends AbstractController
             //var_dump($craw_pri);
             foreach($craw_pro as $pro){
                 $product = new Product();
-                //var_dump($pro);
-                $product->setName($pro->nodeValue);
-                $craw_pri = $craw->filterXPath('//form/div/div[2]/div[1]/div[3]/div/div');
-                $craw_pri = $craw_pri->text();
-                $product->setPrice($craw_pri);
-                //var_dump($product);
-                $category->addProduct($product);
-                $this->entityManager->persist($product);
-                $this->entityManager->flush();
+                $pro_name = $pro->nodeValue;
+                //проверка имеющихся записей
+                if(!($productRepository->findByName($pro_name))){
+                    $product->setName($pro_name);
+                    $craw_pri = $craw->filterXPath('//div[2]/div[1]/div[3]/div/div');
+                    $craw_pri = $craw_pri->text();
+                    $product->setPrice($craw_pri);
+                    //var_dump($product);
+                    $category->addProduct($product);
+                    $this->entityManager->persist($product);
+                    $this->entityManager->flush();
+                }
             }
             /*
             $craw->filterXPath('//form/div/div[2]/div[1]')->each(function(Crawler $craw, $p) {
