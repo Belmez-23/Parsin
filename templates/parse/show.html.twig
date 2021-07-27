@@ -4,12 +4,19 @@
 
 {% block body %}
 <h3>This category is {{ category }}</h3>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
 {% if products|length > 0 %}
     <h4>Products:</h4>
 {% for product in products %}
 <table>
     <tr><td>
-        {{ product.name }}
+            <a href = {{ product.url }} >   {{ product.name }} </a>
     </td><td>
         {{ product.price }}
     </td></tr>

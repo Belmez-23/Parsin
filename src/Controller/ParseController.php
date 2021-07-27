@@ -61,25 +61,26 @@ class ParseController extends AbstractController
             }
 
             $craw_pro = $craw->filter($this->xp_product);
-
+            $product_count = 0;
             foreach($craw_pro as $pro){
                 $cp = new Crawler($pro);
                 $product = new Product();
-                $pro_name = $cp->filter('div.product_name')->text();
+                $pro_name = $cp->filter('div.product_name');
 
-                if(!($productRepository->findByName($pro_name))){
-                    $product->setName($pro_name);
+                if(!($productRepository->findByName($pro_name->text()))){
+                    $product->setName($pro_name->text());
+                    //var_dump($pro_name->getUri());
+                    $product->setUrl('https://nyapi.ru/'.$pro_name->filter('a')->attr('href'));
                     $cp = new Crawler($pro);
                     $pro_price = $cp->filter('.price-current');
-                    //var_dump($pro_price);
                     $product->setPrice($pro_price->text());
-                      //var_dump($product); craw_pro->filterXPath('//div[@class="product-price"]')->text()
                     $category->addProduct($product);
                     $this->entityManager->persist($product);
                     $this->entityManager->flush();
+                    $product_count++;
                 }
             }
-
+            $this->addFlash('success', 'There are '.$product_count.' new products in '.$category_name.' category');
             return $this->redirect('/parser/'.$category->getId());
         }
         else return new Response("Wrong URL address");
