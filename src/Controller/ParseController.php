@@ -70,11 +70,19 @@ class ParseController extends AbstractController
 
                 if(!($productRepository->findByName($pro_name->text()))){
                     $product->setName($pro_name->text());
-                    //var_dump($pro_name->getUri());
-                    $product->setUrl('https://nyapi.ru/'.$pro_name->filter('a')->attr('href'));
+
+                    $pro_url = 'https://nyapi.ru/'.$pro_name->filter('a')->attr('href');
+                    $product->setUrl($pro_url);
+
                     $cp = new Crawler($pro);
-                    $pro_price = $cp->filter('.price-current');
-                    $product->setPrice($pro_price->text());
+                    $pro_price = $cp->filter('.price-current')->text();
+                    $product->setPrice($pro_price);
+                    /*
+                    //Артикул
+                    $pro_page = $client->request('GET', $pro_url, ['allow_redirects' => false]);
+                    $pro_craw = new Crawler($pro_page->getBody()->getContents());
+                    $product->setUrl($pro_craw->filter('.shop2-product-article')->text());
+                    */
                     $category->addProduct($product);
                     $this->entityManager->persist($product);
                     $this->entityManager->flush();
