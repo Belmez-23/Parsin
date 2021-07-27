@@ -45,9 +45,9 @@ class ParseController extends AbstractController
             $res = $client->request('GET', $url, ['allow_redirects' => false]);
             $con = $res->getBody()->getContents();
             $craw = new Crawler($con);
-            $craw_cat = $craw->filterXPath('//body/div[1]/div[7]/div[2]/main/h1'); //путь к заголовку
+            //путь к заголовку
             // заменить на Хпаз ОЗОНа, мейби вынести в конструкт / отд класс
-            $category_name = $craw_cat->text();
+            $category_name = $craw->filterXPath('//body/div[1]/div[7]/div[2]/main/h1')->text();
             //взять заголовок: если не существует - добавить, если существует - найти)
             if(!($categoryRepository->findOneByName($category_name))){
                 $category = new Category();
@@ -57,18 +57,26 @@ class ParseController extends AbstractController
             } else {
                 $category = $categoryRepository->findOneByName($category_name);
             }
+            //var_dump($craw->filterXPath('//form/div/div[2]/div[1]')->text());
+            $craw_pro = $craw->filterXPath('//form/div/div[2]/div[1]/div[1]');
+            //$craw_pri = $craw->filterXPath('//form/div/div[2]/div[1]/div[1]/div[3]/div/div/strong');
 
-            $craw_pro = $craw->filterXPath('form')->each(function(Crawler $craw, $category, $p) {
+            foreach($craw_pro as $pro){
                 $product = new Product();
-                $product->setName($craw->filterXPath('form/div/div[2]/div[1]/div[1]')->text());
-                $product->setPrice($craw->filterXPath('div/div[2]/div[1]/div[3]/div/div')->text());
-                $product->setUrl($craw->filterXPath('form/div/div[2]/div[1]/div[1]')->attr('href'));
+                //var_dump($pro);
+                $product->setName($pro->nodeValue);
+                //$product->setPrice($craw_pri->text());
+                //var_dump($product);
                 $category->addProduct($product);
                 $this->entityManager->persist($product);
                 $this->entityManager->flush();
             }
-            );
+            /*
+            $craw->filterXPath('//form/div/div[2]/div[1]')->each(function(Crawler $craw, $p) {
 
+            }
+            );
+            */
             return $this->redirect('/parser/'.$category->getId());
         }
         else return new Response("Wrong URL address");
