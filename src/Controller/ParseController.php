@@ -60,12 +60,12 @@ class ParseController extends AbstractController
             foreach($crawProduct as $pro){
                 $cp = new Crawler($pro);
                 $product = new Product();
-                $productName = $cp->filter('div.product_name');
+                $productCard = $cp->filter('div.product_name');
+                $productName = $productCard->text();
+                if(!($productRepository->findByName($productName))){
+                    $product->setName($productName);
 
-                if(!($productRepository->findByName($productName->text()))){
-                    $product->setName($productName->text());
-
-                    $productUrl = 'https://nyapi.ru/'.$productName->filter('a')->attr('href');
+                    $productUrl = 'https://nyapi.ru/'.$productCard->filter('a')->attr('href');
                     $product->setUrl($productUrl);
 
                     $productPrice = $cp->filter('.price-current')->text();
@@ -73,7 +73,8 @@ class ParseController extends AbstractController
 
                     $productPage = $client->request('GET', $productUrl);
                     $crawSku = new Crawler((string) $productPage->getBody());
-                    $product->setSku($crawSku->filter('.shop2-product-article')->text());
+                    $productSku = $crawSku->filter('.shop2-product-article')->text();
+                    $product->setSku($productSku);
 
                     $product->setCategory($category);
                     $this->entityManager->persist($product);
