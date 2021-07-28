@@ -40,7 +40,6 @@ class ParseController extends AbstractController
         if(is_null($url)){
             return new Response($twig->render('parse/parse.html.twig'));
         } elseif (filter_var($url, FILTER_VALIDATE_URL)) {
-
             $client = new Client();
             $res = $client->request('GET', $url, ['allow_redirects' => false]);
             $contents = $res->getBody()->getContents();
@@ -84,9 +83,12 @@ class ParseController extends AbstractController
                 }
             }
             $this->addFlash('success', 'Добавлено '.$productCount.' новых товаров в категорию '.$categoryName);
+
             return $this->redirect('/parser/'.$category->getId());
+
+        } else {
+            return new Response("Неправильный ввод");
         }
-        else return new Response("Неправильный ввод");
     }
 
     #[Route('/parser/{id}', name: 'category')]
