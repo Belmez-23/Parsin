@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Категория {{ category }}{% endblock %}
+{% block title %}{{ category }}{% endblock %}
 
 {% block body %}
 <h3>Это категория {{ category }}</h3>
@@ -10,22 +10,22 @@
             {{ message }}
         </div>
     {% endfor %}
-
+    <a href="/admin">Вернуться на панель администратора</a><br/>
+    <a href="/parser">Вернутьcя к вводу</a>
 {% if products|length > 0 %}
     <h4>Продукты из этой категории:</h4>
     <table>
+        <th>Наименование</th><th>Цена</th>
     {% for product in products %}
-
     <tr><td>
             <a href = {{ product.url }} >   {{ product.name }} </a>
     </td><td>
         {{ product.price }}
     </td></tr>
-
-
 {% endfor %}
     </table>
 {% else %}
 <div>В этой категории нет товаров</div>
 {% endif %}
+
 {% endblock %}

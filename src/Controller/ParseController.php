@@ -70,12 +70,7 @@ class ParseController extends AbstractController
 
                     $productPrice = $cp->filter('.price-current')->text();
                     $product->setPrice($productPrice);
-                    /*
-                    //Артикул
-                    $pro_page = $client->request('GET', $productUrl, ['allow_redirects' => false]);
-                    $pro_craw = new Crawler($pro_page->getBody()->getContents());
-                    $product->setUrl($pro_craw->filter('.shop2-product-article')->text());
-                    */
+
                     $product->setCategory($category);
                     $this->entityManager->persist($product);
                     $this->entityManager->flush();
