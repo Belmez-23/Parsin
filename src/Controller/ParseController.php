@@ -41,7 +41,7 @@ class ParseController extends AbstractController
             return new Response($twig->render('parse/parse.html.twig'));
         } elseif (filter_var($url, FILTER_VALIDATE_URL)) {
             $client = new Client();
-            $res = $client->request('GET', $url, ['allow_redirects' => false]);
+            $res = $client->request('GET', $url);
             $contents = $res->getBody()->getContents();
             $craw = new Crawler($contents);
 
@@ -70,6 +70,12 @@ class ParseController extends AbstractController
 
                     $productPrice = $cp->filter('.price-current')->text();
                     $product->setPrice($productPrice);
+
+                    //Артикул
+                    $client = new Client();
+                    $productPage = $client->request('GET', $productUrl);
+                    $crawSku = new Crawler((string) $productPage->getBody());
+                    $product->setSku($crawSku->filter('.shop2-product-article')->text());
 
                     $product->setCategory($category);
                     $this->entityManager->persist($product);
