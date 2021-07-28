@@ -71,8 +71,6 @@ class ParseController extends AbstractController
                     $productPrice = $cp->filter('.price-current')->text();
                     $product->setPrice($productPrice);
 
-                    //Артикул
-                    $client = new Client();
                     $productPage = $client->request('GET', $productUrl);
                     $crawSku = new Crawler((string) $productPage->getBody());
                     $product->setSku($crawSku->filter('.shop2-product-article')->text());
