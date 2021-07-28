@@ -13,16 +13,18 @@
 
 {% if products|length > 0 %}
     <h4>Products:</h4>
-{% for product in products %}
-<table>
+    <table>
+    {% for product in products %}
+
     <tr><td>
             <a href = {{ product.url }} >   {{ product.name }} </a>
     </td><td>
         {{ product.price }}
     </td></tr>
-</table>
+
 
 {% endfor %}
+    </table>
 {% else %}
 <div>В этой категории нет товаров</div>
 {% endif %}

@@ -23,20 +23,20 @@ class ProductCrudController extends AbstractCrudController
         return $crud
             ->setEntityLabelInSingular('Продукт')
             ->setEntityLabelInPlural('Продукты')
-            ->setSearchFields(['name', 'category_id'])
-            ->setDefaultSort(['category_id' => 'DESC']);
+            ->setSearchFields(['name', 'category'])
+            ->setDefaultSort(['category' => 'DESC']);
     }
 
     public function configureFilters(Filters $filters): Filters
     {
             return $filters
-                    ->add(EntityFilter::new('category_id'))
+                    ->add(EntityFilter::new('category'))
             ;
     }
 
     public function configureFields(string $pageName): iterable
     {
-        yield AssociationField::new('category_id');
+        yield AssociationField::new('category');
         yield TextField::new('name');
         yield TextField::new('price');
         yield TextField::new('url')->hideOnIndex();
