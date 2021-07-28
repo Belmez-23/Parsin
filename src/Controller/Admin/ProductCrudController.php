@@ -22,7 +22,7 @@ class ProductCrudController extends AbstractCrudController
         return $crud
             ->setEntityLabelInSingular('Продукт')
             ->setEntityLabelInPlural('Продукты')
-            ->setSearchFields(['name', 'category'])
+            ->setSearchFields(['name', 'name'])
             ->setDefaultSort(['category' => 'DESC']);
     }
 
