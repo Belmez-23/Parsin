@@ -59,10 +59,11 @@ class ParseController extends AbstractController
             $productCount = 0;
             foreach($crawProduct as $pro){
                 $cp = new Crawler($pro);
-                $product = new Product();
+
                 $productCard = $cp->filter('div.product_name');
                 $productName = $productCard->text();
                 if(!($productRepository->findByName($productName))){
+                    $product = new Product();
                     $product->setName($productName);
 
                     $productUrl = 'https://nyapi.ru/'.$productCard->filter('a')->attr('href');
@@ -70,7 +71,7 @@ class ParseController extends AbstractController
 
                     $productPrice = $cp->filter('.price-current')->text();
                     $product->setPrice($productPrice);
-
+                    //добавление SKU требует оптимизации - увеличивает время ожидания на 10-20 секунд
                     $productPage = $client->request('GET', $productUrl);
                     $crawSku = new Crawler((string) $productPage->getBody());
                     $productSku = $crawSku->filter('.shop2-product-article')->text();
